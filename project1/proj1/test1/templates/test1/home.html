@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container text-center" style="margin-top:10px; margin-bottom:10px;">
+    {% if user.is_authenticated%}
+    <div class="alert alert-primary" role="alert">
+        Welcome {{ user.username }}
+    </div>
+    <form method="post" action="{% url 'logoutuser' %}">
+        {% csrf_token %}
+        <button class="btn btn-outline-success btn-lg" type="submit">Logout</button>
+    </form>
+    {% else %}
+    <form method="get" action="{% url 'loginuser' %}">
+        {% csrf_token %}
+        <button class="btn btn-outline-success btn-lg" type="submit">Login</button>
+    </form>
+    <br>
+    <form method="get" action="{% url 'signupuser' %}">
+        {% csrf_token %}
+        <button class="btn btn-outline-success btn-lg" type="submit">Signup</button>
+    </form>
+    {% endif %}
+    </div>
+   <!-- nav bar starts here -->
+   <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+   <!-- nav bar ends here  -->
+
+   <!-- carosuel begins here -->
+   <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1617692855027-33b14f061079?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>   
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+   <!-- carousel ends here -->
+
+   <!-- product header starts here -->
+   <div class="container text-center">
+    <h1>Our Products</h1>
+   </div>
+
+   <!-- product header ends here -->
+
+   <!-- product section begins here -->
+<div class="container text-center">
+   <div class="row">
+    {% for y in page_obj %}
+    <div class="col">
+      <div class="container text-center">
+        <div class="card mb-2" style="width: 18rem;">
+        <img src="{{ y.img.url }}" class="card-img-top" alt="image" style="width: 100%; height: 300px;object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{ y.title }}</h5>
+          <p class="card-text">{{ y.product_id}}</p>
+          <h5>Price</h5>
+          <a href="#" class="btn btn-primary">{{ y.price }}</a>
+          <a class="btn btn-primary" href="{{ y.id }}">Read More</a>
+        </div>
+      </div>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="pagination" style="margin-left: 250px;">
+      <span class="step-links">
+          {% if page_obj.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+  
+          <span class="current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+  
+          {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">next</a>
+              <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+   </div>
+</div>  
+
+   <!-- product section ends here -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>
